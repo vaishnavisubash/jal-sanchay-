@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  
+  --color-brand-blue: #93C5FD;
+  --color-brand-deep: #475569;
+  --color-brand-sand: #FDFBF7;
+  --color-brand-oat: #F5F2ED;
+  --color-brand-sage: #D1FAE5;
+  --color-brand-sky: #E0F2FE;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-sky-50 text-stone-900 antialiased overflow-hidden selection:bg-sky-500/20;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/40 backdrop-blur-3xl border border-white/60 shadow-[0_32px_64px_-16px_rgba(12,165,233,0.15)];
+  }
+  
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_20px_50px_-12px_rgba(12,165,233,0.08)] rounded-[2.5rem] p-6 transition-all duration-700 hover:shadow-[0_30px_60px_-12px_rgba(12,165,233,0.15)] hover:scale-[1.01] hover:bg-white/80;
+  }
+  
+  .glass-dark {
+    @apply bg-sky-950/90 backdrop-blur-3xl border border-white/10 shadow-2xl;
+  }
+  
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-stone-900 via-sky-800 to-sky-600 font-display;
+  }
+
+  .mobile-container {
+    @apply relative mx-auto w-full max-w-[430px] h-screen max-h-screen sm:max-h-[880px] overflow-hidden flex flex-col;
+  }
+
+  .action-button {
+    @apply bg-stone-800 text-white hover:bg-stone-700 hover:shadow-xl hover:shadow-stone-200 active:scale-95 transition-all duration-300 font-bold py-4 rounded-3xl flex items-center justify-center gap-2;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
