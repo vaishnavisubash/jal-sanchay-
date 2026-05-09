@@ -19,152 +19,177 @@ export default function Auth({ onComplete }: AuthProps) {
   const [step, setStep] = useState<'welcome' | 'setup'>('welcome');
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+
+  const STATE_CITIES: Record<string, string[]> = {
+    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore"],
+    "Karnataka": ["Bangalore", "Mysore", "Hubballi", "Belagavi"],
+    "Kerala": ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
+    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane"],
+    "Delhi": ["New Delhi", "North Delhi", "South Delhi", "East Delhi"],
+    "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
+    "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
+    "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
+    "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol"],
+    "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra"],
+    "Meghalaya": ["Shillong", "Tura", "Jowai", "Baghmara"]
+  };
+
+  const INDIAN_STATES = Object.keys(STATE_CITIES);
+
+  const handleStateChange = (val: string) => {
+    setState(val);
+    setCity(''); // Reset city when state changes
+  };
 
   const handleFinish = () => {
-    if (name && city) {
-      onComplete({ name, city });
+    if (name && city && state) {
+      onComplete({ name, city: `${city}, ${state}` });
     }
   };
 
   return (
-    <div className="h-full w-full bg-sky-50 relative overflow-hidden flex flex-col">
-      {/* Background Elements */}
-      <div className="absolute top-[-10%] right-[-20%] w-[600px] h-[600px] bg-sky-200/50 blur-[130px] rounded-full -z-0 animate-pulse" />
-      <div className="absolute bottom-[-10%] left-[-20%] w-[500px] h-[500px] bg-pink-100/40 blur-[110px] rounded-full -z-0" />
-      <div className="absolute top-[40%] left-[10%] w-[300px] h-[300px] bg-white/60 blur-[90px] rounded-full -z-0" />
-      
-      <AnimatePresence mode="wait">
-        {step === 'welcome' ? (
-          <motion.div 
-            key="welcome"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="flex-1 flex flex-col px-10 pt-28 z-10"
-          >
+    <div className="h-full w-full bg-[#081221] relative overflow-hidden flex flex-col items-center justify-center">
+      {/* Dynamic Ambient Background */}
+      <div className="fixed inset-0 pointer-events-none">
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 15, repeat: Infinity }}
+          className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-emerald-500/10 blur-[180px] rounded-full" 
+        />
+      </div>
+
+      <div className="w-full max-w-[480px] h-full flex flex-col relative z-10">
+        <AnimatePresence mode="wait">
+          {step === 'welcome' ? (
             <motion.div 
-              initial={{ scale: 0.8, rotate: -10 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', damping: 15 }}
-              className="w-28 h-28 bg-white/80 backdrop-blur-xl rounded-[3.5rem] shadow-[0_24px_48px_-12px_rgba(12,165,233,0.3)] flex items-center justify-center mb-16 border border-white/80"
+              key="welcome"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex-1 flex flex-col px-10 pt-20"
             >
-              <div className="relative">
-                <Droplets className="w-14 h-14 text-sky-500" />
+              <div className="mb-20">
                 <motion.div 
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-                  transition={{ repeat: Infinity, duration: 3 }}
-                  className="absolute -inset-4 bg-sky-400/20 rounded-full blur-xl -z-10"
-                />
+                  initial={{ rotate: -10 }}
+                  animate={{ rotate: 0 }}
+                  className="w-20 h-20 bg-emerald-600 rounded-3xl flex items-center justify-center shadow-[0_32px_64px_rgba(16,185,129,0.3)] border border-white/20"
+                >
+                  <Droplets className="w-10 h-10 text-white" />
+                </motion.div>
               </div>
-            </motion.div>
 
-            <div className="space-y-8">
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold text-sky-600 uppercase tracking-[0.5em] ml-1">Rainwater Intelligence</span>
-                <h1 className="text-5xl sm:text-7xl font-display font-bold leading-[0.95] text-stone-900 tracking-tighter">
-                  Jal-Sanchay <span className="block text-sky-600 italic mt-1 pb-1">Tracker.</span>
-                </h1>
-              </div>
-              <p className="text-stone-500/80 text-xl font-medium leading-relaxed max-w-[320px] font-sans">
-                The ultimate curator for harvesting, tracking, and precisely conserving rainwater.
-              </p>
-            </div>
-
-            <div className="mt-auto pb-24 space-y-8">
-              <button 
-                onClick={() => setStep('setup')}
-                className="group w-full h-20 bg-sky-600 text-white rounded-[2.5rem] font-bold flex items-center justify-between px-8 shadow-[0_20px_40px_-8px_rgba(12,165,233,0.5)] hover:bg-sky-500 active:scale-[0.98] transition-all text-xl"
-              >
-                <span>Start Harvesting</span>
-                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-6 h-6" />
+              <div className="space-y-10">
+                <div className="space-y-4">
+                  <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.6em] leading-none">Hydro-Collective Intelligence</p>
+                  <h1 className="text-5xl xs:text-6xl sm:text-8xl font-serif font-black text-white tracking-tighter leading-[0.85]">
+                    Jal <br/> <span className="text-emerald-500 italic">Sanchay.</span>
+                  </h1>
                 </div>
-              </button>
-              
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-px w-24 bg-sky-200/50" />
-                <p className="text-[10px] font-bold text-sky-400 uppercase tracking-[0.4em]">
-                  Premium Harvest Edition
+                <p className="text-slate-400 text-xl font-medium leading-relaxed font-sans max-w-[320px]">
+                  Advanced Intelligence for Atmospheric Water Harvesting & Conservation.
                 </p>
               </div>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div 
-            key="setup"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="flex-1 flex flex-col px-10 pt-20 z-10"
-          >
-            <button 
-              onClick={() => setStep('welcome')}
-              className="w-14 h-14 rounded-3xl bg-white/60 backdrop-blur-md border border-white/80 flex items-center justify-center text-sky-600 mb-16 hover:bg-white transition-all shadow-xl shadow-sky-900/5 active:scale-90"
+
+              <div className="mt-32 pb-20">
+                <button 
+                  onClick={() => setStep('setup')}
+                  className="group w-full h-20 bg-emerald-600 text-white rounded-[2.5rem] font-bold flex items-center justify-between px-10 shadow-[0_24px_48px_rgba(16,185,129,0.4)] hover:bg-emerald-500 active:scale-95 transition-all text-xl"
+                >
+                  <span>Start Your Journey</span>
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="setup"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="flex-1 flex flex-col px-10 pt-16"
             >
-              <ChevronLeft className="w-7 h-7" />
-            </button>
-
-            <div className="space-y-3 mb-16">
-              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.3em]">Identity Setup</span>
-              <h2 className="text-5xl font-display font-bold text-stone-900 tracking-tight leading-tight">Curate Your <span className="text-sky-600 italic">Space</span></h2>
-              <p className="text-stone-400 text-lg font-medium pr-10">Personalize your high-fidelity atmospheric dashboard.</p>
-            </div>
-
-            <div className="space-y-12">
-              <div className="space-y-4">
-                <label className="text-[10px] font-bold uppercase tracking-[0.25em] text-sky-800/40 ml-4">Full Identity</label>
-                <div className="relative group">
-                  <span className="absolute left-8 top-1/2 -translate-y-1/2 text-sky-300 group-focus-within:text-sky-500 transition-colors">
-                    <User className="w-7 h-7" />
-                  </span>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full h-20 bg-white/80 backdrop-blur-md rounded-[2.5rem] px-20 outline-none border border-white/80 focus:border-sky-200 shadow-xl shadow-sky-900/5 transition-all font-bold text-stone-800 placeholder:text-stone-300 text-xl"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <label className="text-[10px] font-bold uppercase tracking-[0.25em] text-sky-800/40 ml-4">Geographic Hub</label>
-                <div className="relative group">
-                  <span className="absolute left-8 top-1/2 -translate-y-1/2 text-sky-300 group-focus-within:text-sky-500 transition-colors">
-                    <MapPin className="w-7 h-7" />
-                  </span>
-                  <input 
-                    type="text" 
-                    placeholder="E.g. London, UK"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full h-20 bg-white/80 backdrop-blur-md rounded-[2.5rem] px-20 outline-none border border-white/80 focus:border-sky-200 shadow-xl shadow-sky-900/5 transition-all font-bold text-stone-800 placeholder:text-stone-300 text-xl"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-auto pb-24">
               <button 
-                onClick={handleFinish}
-                disabled={!name || !city}
-                className={cn(
-                  "w-full h-20 rounded-[2.5rem] font-bold flex items-center justify-center gap-4 transition-all shadow-2xl",
-                  (name && city) 
-                    ? "bg-stone-900 text-white shadow-stone-900/40 translate-y-0 active:scale-[0.98]" 
-                    : "bg-sky-100 text-sky-300 shadow-none cursor-not-allowed translate-y-2 opacity-50"
-                )}
+                onClick={() => setStep('welcome')}
+                className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-16 hover:bg-white/10 transition-all shadow-2xl"
               >
-                Launch Dashboard
-                <Sparkles className="w-6 h-6 text-pink-300" />
+                <ChevronLeft className="w-6 h-6" />
               </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      <div className="absolute bottom-[-10%] right-[-5%] w-80 h-80 -rotate-12 opacity-5 pointer-events-none">
-        <Waves className="w-full h-full text-stone-400" />
+              <div className="space-y-4 mb-20">
+                <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-[0.4em]">Curator Registration</p>
+                <h2 className="text-5xl font-serif font-bold text-white tracking-tight">Identity Hub</h2>
+              </div>
+
+              <div className="space-y-10">
+                <div className="space-y-3">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">Full Identity</label>
+                  <div className="relative group">
+                    <User className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-emerald-400 transition-colors" />
+                    <input 
+                      type="text" 
+                      placeholder="Node Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full h-18 bg-white/5 rounded-[2rem] px-16 outline-none border border-white/10 focus:border-emerald-500/50 transition-all font-bold text-white placeholder:text-slate-600"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">State Node</label>
+                    <select 
+                      value={state}
+                      onChange={(e) => handleStateChange(e.target.value)}
+                      className="w-full h-18 bg-white/5 rounded-[2rem] px-8 outline-none border border-white/10 focus:border-emerald-500/50 transition-all font-bold text-white appearance-none cursor-pointer"
+                    >
+                      <option value="" disabled className="bg-[#081221]">State</option>
+                      {INDIAN_STATES.map(s => (
+                        <option key={s} value={s} className="bg-[#081221]">{s}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">City Port</label>
+                    <select 
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      disabled={!state}
+                      className={cn(
+                        "w-full h-18 bg-white/5 rounded-[2rem] px-8 outline-none border border-white/10 focus:border-emerald-500/50 transition-all font-bold text-white appearance-none cursor-pointer",
+                        !state && "opacity-50 cursor-not-allowed"
+                      )}
+                    >
+                      <option value="" disabled className="bg-[#081221]">City</option>
+                      {state && STATE_CITIES[state]?.map(c => (
+                        <option key={c} value={c} className="bg-[#081221]">{c}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-24 pb-20">
+                <button 
+                  onClick={handleFinish}
+                  disabled={!name || !city || !state}
+                  className={cn(
+                    "w-full h-20 rounded-[2.5rem] font-bold flex items-center justify-center transition-all",
+                    (name && city && state) 
+                      ? "bg-emerald-600 text-white shadow-[0_32px_64px_rgba(16,185,129,0.3)] hover:bg-emerald-500 active:scale-95" 
+                      : "bg-white/5 text-slate-400 cursor-not-allowed opacity-50"
+                  )}
+                >
+                  Get Started
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

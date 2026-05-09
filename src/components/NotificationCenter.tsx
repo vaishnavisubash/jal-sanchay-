@@ -34,52 +34,52 @@ export default function NotificationCenter({ isOpen, onClose }: { isOpen: boolea
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/10 backdrop-blur-[2px] z-[50]"
+            className="fixed inset-0 bg-black/40 backdrop-blur-md z-[50]"
           />
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed top-24 right-5 left-5 sm:left-auto sm:w-[320px] bg-white rounded-3xl shadow-2xl z-[60] overflow-hidden border border-stone-100"
+            className="fixed top-24 right-5 left-5 sm:left-auto sm:w-[380px] bg-[#0c1a2e] rounded-[2.5rem] shadow-[0_32px_64px_rgba(0,0,0,0.4)] z-[60] overflow-hidden border border-white/5"
           >
-            <div className="p-4 border-b border-stone-50 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Bell className="w-4 h-4 text-sky-500" />
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-800">Alerts</span>
+            <div className="p-8 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Bell className="w-5 h-5 text-emerald-500" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white">System Alerts</span>
               </div>
-              <button onClick={onClose} className="p-1 hover:bg-stone-50 rounded-lg transition-colors">
-                <X className="w-4 h-4 text-stone-400" />
+              <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-xl transition-all">
+                <X className="w-5 h-5 text-slate-300" />
               </button>
             </div>
             
-            <div className="max-h-[380px] overflow-y-auto p-2 space-y-1">
+            <div className="max-h-[440px] overflow-y-auto p-4 space-y-2">
               {NOTIFICATIONS.map((n) => (
-                <div key={n.id} className="p-3 rounded-2xl hover:bg-stone-50 transition-colors flex gap-3 group">
+                <div key={n.id} className="p-5 rounded-[2rem] hover:bg-white/5 transition-all flex gap-5 group cursor-pointer border border-transparent hover:border-white/5">
                   <div className={cn(
-                    "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
-                    n.type === 'rain' && "bg-sky-50 text-sky-500",
-                    n.type === 'warning' && "bg-amber-50 text-amber-500",
-                    n.type === 'success' && "bg-rose-50 text-rose-400",
-                    n.type === 'info' && "bg-slate-50 text-slate-500",
+                    "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border transition-all duration-500",
+                    n.type === 'rain' && "bg-emerald-600/10 text-emerald-400 border-emerald-500/20 group-hover:bg-emerald-600 group-hover:text-white",
+                    n.type === 'warning' && "bg-white/5 text-slate-400 border-white/10",
+                    n.type === 'success' && "bg-emerald-600 text-white shadow-lg",
+                    n.type === 'info' && "bg-white/5 text-slate-400 border-white/10",
                   )}>
-                    {n.type === 'rain' && <CloudRain className="w-5 h-5" />}
-                    {n.type === 'warning' && <AlertTriangle className="w-5 h-5" />}
-                    {n.type === 'success' && <CheckCircle2 className="w-5 h-5" />}
-                    {n.type === 'info' && <Droplet className="w-5 h-5" />}
+                    {n.type === 'rain' && <CloudRain className="w-6 h-6" />}
+                    {n.type === 'warning' && <AlertTriangle className="w-6 h-6" />}
+                    {n.type === 'success' && <CheckCircle2 className="w-6 h-6" />}
+                    {n.type === 'info' && <Droplet className="w-6 h-6" />}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-0.5">
-                      <h4 className="text-[13px] font-bold text-slate-800 truncate">{n.title}</h4>
-                      <span className="text-[9px] font-bold text-stone-300">{n.time}</span>
+                  <div className="flex-1 min-w-0 pt-1">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="text-[15px] font-serif font-bold text-white truncate">{n.title}</h4>
+                      <span className="text-[9px] font-mono font-bold text-slate-400">{n.time}</span>
                     </div>
-                    <p className="text-[11px] text-stone-500 leading-normal line-clamp-2">{n.message}</p>
+                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 font-medium">{n.message}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="p-3 bg-stone-50/50 text-center">
-               <button className="text-[10px] font-bold text-sky-600 uppercase tracking-widest hover:underline">Mark all as read</button>
+            <div className="p-6 bg-white/5 text-center">
+               <button className="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.3em] hover:text-white transition-colors">Clear All Intercepts</button>
             </div>
           </motion.div>
         </>

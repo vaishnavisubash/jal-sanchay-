@@ -1,4 +1,4 @@
-export type RegionType = 'Tropical' | 'Arid' | 'Moderate' | 'Heavy Rain';
+export type RegionType = 'Tropical' | 'Arid' | 'Moderate' | 'Heavy Rain' | 'Monsoon Range' | 'Coastal Tropical' | 'Semi-Arid' | 'Humid Subtropical' | 'Equatorial';
 
 export interface LocationData {
   city: string;
@@ -24,4 +24,4 @@ export interface Tip {
   icon: string;
 }
 
-export type Screen = 'dashboard' | 'calculator' | 'history' | 'tips' | 'equipment';
+export type Screen = 'dashboard' | 'weather' | 'assistant' | 'calculator';

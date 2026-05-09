@@ -62,58 +62,58 @@ export default function HelpOverlay({ isOpen, onClose, screen }: HelpOverlayProp
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-6">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-8">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-stone-900/60 backdrop-blur-md"
+            className="absolute inset-0 bg-black/80 backdrop-blur-3xl"
           />
           
           <motion.div 
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 100 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="w-full max-w-sm bg-white rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl relative overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95, y: 100 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 100 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="w-full max-w-lg bg-[#081221] rounded-t-[4rem] sm:rounded-[4rem] shadow-[0_64px_128px_rgba(0,0,0,0.5)] relative overflow-hidden border-t sm:border border-white/10"
           >
-            <div className="p-10 pt-12">
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-sky-50 text-sky-500">
-                    <HelpCircle className="w-6 h-6" />
+            <div className="p-12 sm:p-16">
+              <div className="flex items-center justify-between mb-12">
+                <div className="flex items-center gap-5">
+                  <div className="p-4 rounded-2xl bg-emerald-600/20 text-emerald-500 border border-emerald-500/30">
+                    <HelpCircle className="w-8 h-8" />
                   </div>
-                  <h2 className="text-2xl font-display font-bold text-stone-800 tracking-tight">
-                    {content.title}
+                  <h2 className="text-3xl font-serif font-black text-white tracking-tighter">
+                    {content.title}.
                   </h2>
                 </div>
                 <button 
                   onClick={onClose}
-                  className="p-2 rounded-full hover:bg-stone-50 transition-colors text-stone-300"
+                  className="p-3 rounded-full bg-white/5 text-slate-500 hover:bg-white/10 hover:text-white transition-all"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 
-              <div className="space-y-6">
-                <p className="text-stone-500 text-sm font-medium leading-relaxed italic">
+              <div className="space-y-10">
+                <p className="text-slate-500 text-lg font-medium leading-relaxed italic border-l-2 border-emerald-500/30 pl-6">
                   "{content.desc}"
                 </p>
 
-                <div className="space-y-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-300">Quick Guides</p>
-                  <ul className="space-y-3">
+                <div className="space-y-6">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-emerald-500/50">Tactical Protocols</p>
+                  <ul className="space-y-6">
                     {content.tips.map((tip, i) => (
                       <motion.li 
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.1 }}
                         key={i} 
-                        className="flex gap-3 items-start"
+                        className="flex gap-5 items-start group"
                       >
-                        <div className="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5 shrink-0" />
-                        <span className="text-xs text-stone-400 font-medium leading-relaxed">{tip}</span>
+                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 mt-2 shrink-0 shadow-[0_0_10px_rgba(16,185,129,0.5)] group-hover:scale-125 transition-transform" />
+                        <span className="text-sm text-slate-400 font-medium leading-relaxed group-hover:text-white transition-colors">{tip}</span>
                       </motion.li>
                     ))}
                   </ul>
@@ -121,12 +121,13 @@ export default function HelpOverlay({ isOpen, onClose, screen }: HelpOverlayProp
 
                 <button 
                   onClick={onClose}
-                  className="w-full h-14 bg-sky-900 text-white rounded-[2rem] font-bold text-sm shadow-xl active:scale-95 transition-all mt-4"
+                  className="w-full h-20 bg-emerald-600 text-white rounded-[2.5rem] font-black text-xs shadow-2xl active:scale-95 transition-all mt-6 uppercase tracking-[0.4em]"
                 >
-                  Understood
+                  Dismiss Intel
                 </button>
               </div>
             </div>
+            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/5 rounded-full blur-3xl" />
           </motion.div>
         </div>
       )}
