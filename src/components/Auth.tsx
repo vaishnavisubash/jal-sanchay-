@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Droplets, 
-  ArrowRight, 
-  User, 
-  MapPin, 
-  Waves,
-  ChevronLeft,
-  Sparkles
+import {
+  Droplets,
+  ArrowRight,
+  User,
+  ChevronLeft
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -18,8 +15,11 @@ interface AuthProps {
 export default function Auth({ onComplete }: AuthProps) {
   const [step, setStep] = useState<'welcome' | 'setup'>('welcome');
   const [name, setName] = useState('');
+  const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
+
+  const COUNTRIES = ["India", "USA", "Canada", "Australia", "UK"];
 
   const STATE_CITIES: Record<string, string[]> = {
     "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore"],
@@ -38,14 +38,23 @@ export default function Auth({ onComplete }: AuthProps) {
 
   const INDIAN_STATES = Object.keys(STATE_CITIES);
 
+  const handleCountryChange = (val: string) => {
+    setCountry(val);
+    setState('');
+    setCity('');
+  };
+
   const handleStateChange = (val: string) => {
     setState(val);
-    setCity(''); // Reset city when state changes
+    setCity('');
   };
 
   const handleFinish = () => {
-    if (name && city && state) {
-      onComplete({ name, city: `${city}, ${state}` });
+    if (name && city && state && country) {
+      onComplete({
+        name,
+        city: `${city}, ${state}, ${country}`
+      });
     }
   };
 
@@ -53,17 +62,17 @@ export default function Auth({ onComplete }: AuthProps) {
     <div className="h-full w-full bg-[#081221] relative overflow-hidden flex flex-col items-center justify-center">
       {/* Dynamic Ambient Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
           transition={{ duration: 15, repeat: Infinity }}
-          className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-emerald-500/10 blur-[180px] rounded-full" 
+          className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-emerald-500/10 blur-[180px] rounded-full"
         />
       </div>
 
       <div className="w-full max-w-[480px] h-full flex flex-col relative z-10">
         <AnimatePresence mode="wait">
           {step === 'welcome' ? (
-            <motion.div 
+            <motion.div
               key="welcome"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -72,7 +81,7 @@ export default function Auth({ onComplete }: AuthProps) {
               className="flex-1 flex flex-col px-10 pt-20"
             >
               <div className="mb-20">
-                <motion.div 
+                <motion.div
                   initial={{ rotate: -10 }}
                   animate={{ rotate: 0 }}
                   className="w-20 h-20 bg-emerald-600 rounded-3xl flex items-center justify-center shadow-[0_32px_64px_rgba(16,185,129,0.3)] border border-white/20"
@@ -83,35 +92,44 @@ export default function Auth({ onComplete }: AuthProps) {
 
               <div className="space-y-10">
                 <div className="space-y-4">
-                  <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.6em] leading-none">Hydro-Collective Intelligence</p>
+                  <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.6em] leading-none">
+                    Hydro-Collective Intelligence
+                  </p>
+
                   <h1 className="text-5xl xs:text-6xl sm:text-8xl font-serif font-black text-white tracking-tighter leading-[0.85]">
-                    Jal <br/> <span className="text-emerald-500 italic">Sanchay.</span>
+                    Jal <br />
+                    <span className="text-emerald-500 italic">
+                      Sanchay.
+                    </span>
                   </h1>
                 </div>
+
                 <p className="text-slate-400 text-xl font-medium leading-relaxed font-sans max-w-[320px]">
-                  Advanced Intelligence for Atmospheric Water Harvesting & Conservation.
+                  Advanced Intelligence for Atmospheric Water Harvesting &
+                  Conservation.
                 </p>
               </div>
 
               <div className="mt-32 pb-20">
-                <button 
+                <button
                   onClick={() => setStep('setup')}
                   className="group w-full h-20 bg-emerald-600 text-white rounded-[2.5rem] font-bold flex items-center justify-between px-10 shadow-[0_24px_48px_rgba(16,185,129,0.4)] hover:bg-emerald-500 active:scale-95 transition-all text-xl"
                 >
                   <span>Start Your Journey</span>
+
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </motion.div>
           ) : (
-            <motion.div 
+            <motion.div
               key="setup"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               className="flex-1 flex flex-col px-10 pt-16"
             >
-              <button 
+              <button
                 onClick={() => setStep('welcome')}
                 className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-16 hover:bg-white/10 transition-all shadow-2xl"
               >
@@ -119,17 +137,26 @@ export default function Auth({ onComplete }: AuthProps) {
               </button>
 
               <div className="space-y-4 mb-20">
-                <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-[0.4em]">Curator Registration</p>
-                <h2 className="text-5xl font-serif font-bold text-white tracking-tight">Identity Hub</h2>
+                <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-[0.4em]">
+                  Curator Registration
+                </p>
+
+                <h2 className="text-5xl font-serif font-bold text-white tracking-tight">
+                  Identity Hub
+                </h2>
               </div>
 
               <div className="space-y-10">
                 <div className="space-y-3">
-                  <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">Full Identity</label>
+                  <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">
+                    Full Identity
+                  </label>
+
                   <div className="relative group">
                     <User className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-emerald-400 transition-colors" />
-                    <input 
-                      type="text" 
+
+                    <input
+                      type="text"
                       placeholder="Node Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -138,24 +165,72 @@ export default function Auth({ onComplete }: AuthProps) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
+                  {/* Country */}
                   <div className="space-y-3">
-                    <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">State Node</label>
-                    <select 
-                      value={state}
-                      onChange={(e) => handleStateChange(e.target.value)}
+                    <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">
+                      Country
+                    </label>
+
+                    <select
+                      value={country}
+                      onChange={(e) => handleCountryChange(e.target.value)}
                       className="w-full h-18 bg-white/5 rounded-[2rem] px-8 outline-none border border-white/10 focus:border-emerald-500/50 transition-all font-bold text-white appearance-none cursor-pointer"
                     >
-                      <option value="" disabled className="bg-[#081221]">State</option>
-                      {INDIAN_STATES.map(s => (
-                        <option key={s} value={s} className="bg-[#081221]">{s}</option>
+                      <option value="" disabled className="bg-[#081221]">
+                        Country
+                      </option>
+
+                      {COUNTRIES.map((c) => (
+                        <option
+                          key={c}
+                          value={c}
+                          className="bg-[#081221]"
+                        >
+                          {c}
+                        </option>
                       ))}
                     </select>
                   </div>
 
+                  {/* State */}
                   <div className="space-y-3">
-                    <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">City Port</label>
-                    <select 
+                    <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">
+                      State Node
+                    </label>
+
+                    <select
+                      value={state}
+                      onChange={(e) => handleStateChange(e.target.value)}
+                      disabled={!country}
+                      className={cn(
+                        "w-full h-18 bg-white/5 rounded-[2rem] px-8 outline-none border border-white/10 focus:border-emerald-500/50 transition-all font-bold text-white appearance-none cursor-pointer",
+                        !country && "opacity-50 cursor-not-allowed"
+                      )}
+                    >
+                      <option value="" disabled className="bg-[#081221]">
+                        State
+                      </option>
+
+                      {INDIAN_STATES.map((s) => (
+                        <option
+                          key={s}
+                          value={s}
+                          className="bg-[#081221]"
+                        >
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* City */}
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-300 ml-2">
+                      City Port
+                    </label>
+
+                    <select
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                       disabled={!state}
@@ -164,23 +239,33 @@ export default function Auth({ onComplete }: AuthProps) {
                         !state && "opacity-50 cursor-not-allowed"
                       )}
                     >
-                      <option value="" disabled className="bg-[#081221]">City</option>
-                      {state && STATE_CITIES[state]?.map(c => (
-                        <option key={c} value={c} className="bg-[#081221]">{c}</option>
-                      ))}
+                      <option value="" disabled className="bg-[#081221]">
+                        City
+                      </option>
+
+                      {state &&
+                        STATE_CITIES[state]?.map((c) => (
+                          <option
+                            key={c}
+                            value={c}
+                            className="bg-[#081221]"
+                          >
+                            {c}
+                          </option>
+                        ))}
                     </select>
                   </div>
                 </div>
               </div>
 
               <div className="mt-24 pb-20">
-                <button 
+                <button
                   onClick={handleFinish}
-                  disabled={!name || !city || !state}
+                  disabled={!name || !country || !city || !state}
                   className={cn(
                     "w-full h-20 rounded-[2.5rem] font-bold flex items-center justify-center transition-all",
-                    (name && city && state) 
-                      ? "bg-emerald-600 text-white shadow-[0_32px_64px_rgba(16,185,129,0.3)] hover:bg-emerald-500 active:scale-95" 
+                    (name && country && city && state)
+                      ? "bg-emerald-600 text-white shadow-[0_32px_64px_rgba(16,185,129,0.3)] hover:bg-emerald-500 active:scale-95"
                       : "bg-white/5 text-slate-400 cursor-not-allowed opacity-50"
                   )}
                 >
